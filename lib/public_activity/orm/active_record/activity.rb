@@ -45,21 +45,7 @@ module PublicActivity
         end
 
         # Serialize parameters Hash
-        begin
-          if table_exists?
-            serialize :parameters, Hash unless [:json, :jsonb, :hstore].include?(columns_hash['parameters'].type)
-          else
-            warn("[WARN] table #{name} doesn't exist. Skipping PublicActivity::Activity#parameters's serialization")
-          end
-        rescue ::ActiveRecord::NoDatabaseError
-          warn("[WARN] database doesn't exist. Skipping PublicActivity::Activity#parameters's serialization")
-        rescue ::ActiveRecord::ConnectionNotEstablished
-          warn("[WARN] couldn't connect to database. Skipping PublicActivity::Activity#parameters's serialization")
-        rescue ::PG::ConnectionBad
-          warn("[WARN] couldn't connect to database. Skipping PublicActivity::Activity#parameters's serialization")
-        rescue Mysql2::Error::ConnectionError
-          warn("[WARN] couldn't connect to database. Skipping PublicActivity::Activity#parameters's serialization")
-        end
+        serialize :parameters, Hash
 
         if ::ActiveRecord::VERSION::MAJOR < 4 || defined?(ProtectedAttributes)
           attr_accessible :key, :owner, :parameters, :recipient, :trackable
